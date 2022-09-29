@@ -23,7 +23,7 @@ watch(properSalary, () => {
 })
 
 watch(firstDate, () => {
-  firstDate.value = dayjs(firstDate.value).format("MM/DD/YYYY")
+  firstDate.value = firstDate.value.replace(/^\d{2}\/\d{2}\/\d{4}$/)
 })
 
 watch(secondDate, () => {
@@ -50,22 +50,22 @@ const lastDayOfFirstDate = computed(() => {
 <template>
   <div class="mt-6">
     <input type="text" placeholder="Current Salary" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="currentSalary">
+      v-model="currentSalary" maxlength="10">
   </div>
 
   <div class="mt-6">
     <input type="text" placeholder="Proper Salary" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="properSalary">
+      v-model="properSalary" maxlength="10">
   </div>
 
   <div class="mt-6">
     <input type="text" placeholder="MM/DD/YYYY" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="firstDate">
+      v-model="firstDate" maxlength="10">
   </div>
 
   <div class="mt-6">
     <input type="text" placeholder="MM/DD/YYYY" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="secondDate">
+      v-model="secondDate" maxlength="10">
   </div>
 
 </template>
