@@ -6,13 +6,14 @@ import { round } from "mathjs/number"
 
 dayjs.extend(dayjsBusinessDays)
 
-const currentSalary = ref("")
-const properSalary = ref("")
+const currentSalary = ref(null)
+const properSalary = ref(null)
 const firstDate = ref("")
 const secondDate = ref("")
+const input1 = ref(null)
 
 onMounted(() => {
-  currentSalary.value.focus()
+  input1.value.focus()
 })
 
 watch(currentSalary, () => {
@@ -49,11 +50,10 @@ const lastDayOfFirstDate = computed(() => {
 </script>
 
 
-    
 <template>
   <div class="mt-6">
     <input type="text" placeholder="Current Salary" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="currentSalary" ref="currentSalary" maxlength="10">
+      v-model="currentSalary" ref="input1" maxlength="10">
   </div>
 
   <div class="mt-6">
