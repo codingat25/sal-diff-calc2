@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch, watchEffect, onMounted } from 'vue'
 import dayjs from "dayjs"
 import dayjsBusinessDays from "dayjs-business-days"
 import { round } from "mathjs/number"
@@ -11,6 +11,9 @@ const properSalary = ref("")
 const firstDate = ref("")
 const secondDate = ref("")
 
+onMounted(() => {
+  currentSalary.value.focus()
+})
 
 watch(currentSalary, () => {
   currentSalary.value = currentSalary.value.replace(/\D/g, "")
@@ -50,7 +53,7 @@ const lastDayOfFirstDate = computed(() => {
 <template>
   <div class="mt-6">
     <input type="text" placeholder="Current Salary" class="w-56 text-2xl bg-gray-300 p-3 rounded-lg focus:outline-none"
-      v-model="currentSalary" maxlength="10">
+      v-model="currentSalary" ref="currentSalary" maxlength="10">
   </div>
 
   <div class="mt-6">
