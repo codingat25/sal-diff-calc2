@@ -126,7 +126,155 @@ const businessDaysSecondDate = computed(() => getBusinessDays(
 ));
 
 //==================================================================================
-//
+//check if data is eligible for mid-year and year-end
+const midYearEligible = computed(() => {
+  return firstDate.value <= midYearDate.value && secondDate.value >= midYearDate.value;
+});
+
+const yearEndEligible = computed(() => {
+  return firstDate.value <= yearEndDate.value && secondDate.value >= yearEndDate.value;
+});
+
+
+//==================================================================================
+//calculate tax rate
+const taxPercentage = computed(() => {
+  const annualSalary = properSalary.value * 12;
+
+  if (annualSalary <= 250000) {
+    return 0;
+  } else if (annualSalary <= 400000) {
+    return 0.2;
+  } else if (annualSalary <= 800000) {
+    return 0.25;
+  } else if (annualSalary <= 2000000) {
+    return 0.3;
+  } else {
+    return 0.32;
+  }
+});
+
+//==================================================================================
+//calculate salary differential
+
+const calculatedDifferential = computed(() => {
+  let differential = initialDifferentialAmount.value * differenceInMonths.value;
+
+  if (checkFirstDate.value === true && checkSecondDate.value === false) {
+    differential += (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
+  } else if (checkFirstDate.value === false && checkSecondDate.value === true) {
+    differential += (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
+  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
+    differential += (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
+    differential += (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
+  }
+
+  return differential;
+});
+
+//==================================================================================
+//calculate salary differential bonus
+
+const sdBonus = computed(() => {
+  if (midYearEligible.value && yearEndEligible.value) {
+    return initialDifferentialAmount.value * 2;
+  } else if (midYearEligible.value || yearEndEligible.value) {
+    return initialDifferentialAmount.value;
+  } else {
+    return 0;
+  }
+});
+
+//==================================================================================
+//calculate gross salary differential
+
+const grossSalDiff = computed(() => calculatedDifferential.value + sdBonus.value);
+
+//==================================================================================
+//calculate GSIS Rate
+    //GSIS PS AND GS RATES
+    const gsisPS = computed(() => {
+      return 0.09;
+    });
+
+    const gsisGS = computed(() => {
+      return 0.12;
+    });
+
+
+//==================================================================================
+//calculate GSIS Personal Share 
+
+const gsisPshare = computed(() => {
+  let share = initialDifferentialAmount.value * differenceInMonths.value * gsisPS.value;
+
+  if (checkFirstDate.value === false && checkSecondDate.value === true) {
+    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisPS.value;
+  } else if (checkFirstDate.value === true && checkSecondDate.value === false) {
+    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisPS.value;
+  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
+    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisPS.value;
+    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisPS.value;
+  }
+
+  return share;
+});
+
+//==================================================================================
+//calculate GSIS Government Share 
+const gsisGshare = computed(() => {
+  let share = initialDifferentialAmount.value * differenceInMonths.value * gsisGS.value;
+
+  if (checkFirstDate.value === false && checkSecondDate.value === true) {
+    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisGS.value;
+  } else if (checkFirstDate.value === true && checkSecondDate.value === false) {
+    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisGS.value;
+  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
+    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisGS.value;
+    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisGS.value;
+  }
+
+  return share;
+});
+
+//==================================================================================
+//basic computation of deductions
+const lessGsis = computed(() => {
+  return calculatedDifferential.value - gsisPshare.value;
+});
+
+const withholdingTax = computed(() => {
+  return lessGsis.value * taxPercentage.value;
+});
+
+//==================================================================================
+//format all data to two decimal places
+
+const round = (num, decimalPlaces) => Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+
+const formattedProperSalary = computed(() => round(properSalary.value, 2));
+const formattedCurrentSalary = computed(() => round(currentSalary.value, 2));
+const formattedInitialDifferentialAmount = computed(() => round(initialDifferentialAmount.value, 2));
+const formattedCalculatedDifferential = computed(() => round(calculatedDifferential.value, 2));
+const formattedSdBonus = computed(() => round(sdBonus.value, 2));
+const formattedGrossSalDiff = computed(() => round(grossSalDiff.value, 2));
+const formattedGsisPshare = computed(() => round(gsisPshare.value, 2));
+const formattedGsisGshare = computed(() => round(gsisGshare.value, 2));
+const formattedLessGsis = computed(() => round(lessGsis.value, 2));
+const formattedWithholdingTax = computed(() => round(withholdingTax.value, 2));
+
+//==================================================================================
+//finally the basic deductions 
+
+const totalDeduction = computed(() => {
+      return formattedGsisPshare.value + formattedWithholdingTax.value;
+    });
+
+const netAmount = computed(() => {
+      return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
+    });
+
+
 </script>
 
 <template>
