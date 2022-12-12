@@ -73,15 +73,43 @@ const differenceInMonths = computed(() => {
   (dayjs(secondDate.value).diff(firstDate.value, "month")-1) > 0){
     return dayjs(secondDate.value).diff(firstDate.value, "month") - 1;
   } else if ((dayjs(checkFirstDate.value) === false && dayjs(checkSecondDate.value)=== true) &&
-   (getMonthOfFirstDay === getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+   (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)<=31) {
       return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
   } else if ((dayjs(checkFirstDate.value) === false && dayjs(checkSecondDate.value)=== true) &&
-   (getMonthOfFirstDay === getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+   (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)>=31) {
       return dayjs(secondDate.value).diff(firstDate.value, "month");
-  } 
+  } else if ((dayjs(checkFirstDate.value) === true && dayjs(checkSecondDate.value)=== false) &&
+   (getMonthOfFirstDay.value === getMonthOfSecondDay.value)) {
+      return dayjs(secondDate.value).diff(firstDate.value, "month");
+  } else if ((dayjs(checkFirstDate.value) === true && dayjs(checkSecondDate.value)=== false) &&
+   (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+    && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)>=31) {
+      return dayjs(secondDate.value).diff(firstDate.value, "month");
+  }
 });
+
+// const differenceInMonths = computed(() => {
+//   const start = dayjs(firstDate.value);
+//   const end = dayjs(secondDate.value);
+//   let diff = end.diff(start, "month");
+
+//   if (dayjs(checkFirstDate.value).isSame(dayjs(checkSecondDate.value))) {
+//     diff += 1;
+//   } else if ((dayjs(checkFirstDate.value) && dayjs(checkSecondDate.value)) === false) {
+//     diff -= 1;
+//   }
+
+//   if ((dayjs(checkFirstDate.value) === false && dayjs(checkSecondDate.value)=== true) &&
+//     getMonthOfFirstDay.value !== getMonthOfSecondDay.value && end.isSame(end.endOf("month")) 
+//     && (diff + 1) <= 31) {
+//     diff += 1;
+//   }
+
+//   return Math.max(0, diff);
+// });
+
 
 //================================================================================
 //calculate total calendar days
