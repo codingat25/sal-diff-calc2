@@ -3,10 +3,12 @@ import { ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
 
-const currentSalary = ref(0);
-const properSalary = ref(0);
-const firstDate = ref("12/01/2022");
-const secondDate = ref("12/31/2022");
+dayjs.extend(dayBusinessDays);
+
+const currentSalary = ref(25439);
+const properSalary = ref(27877);
+const firstDate = ref("01/03/2022");
+const secondDate = ref("05/15/2022");
 
 //=================================================================================
 // get initial differential amount
@@ -28,8 +30,6 @@ const lastDayOfFirstDate = computed(() => firstAndLastDay(firstDate, "endOf"));
 const firstDayOfSecondDate = computed(() => firstAndLastDay(secondDate, "startOf"));
 const lastDayOfSecondDate = computed(() => firstAndLastDay(secondDate, "endOf"));
 
-
-
 //================================================================================
 // gina-check kung do gintype sa unang date hay unang adlaw gid it buean
 const checkFirstDate = computed(() => {
@@ -45,13 +45,42 @@ const checkSecondDate = computed(() => {
 });
 
 //================================================================================
+//get month and day of given dates
+const getDateValues = (date) => {
+  return {
+    month: dayjs(date.value).month() + 1,
+    day: dayjs(date.value).date(),
+  };
+}
+
+const getMonthOfFirstDay = computed(() => getDateValues(firstDate).month);
+const getDayOfFirstDate = computed(() => getDateValues(firstDate).day);
+const getDayOfLastDateOfFirstDate = computed(() => getDateValues(lastDayOfFirstDate).day);
+const getMonthOfSecondDay = computed(() => getDateValues(secondDate).month);
+const getDayOfSecondDate = computed(() => getDateValues(secondDate).day);
+const getDayOfFirstDateOfSecondDate = computed(() => getDateValues(firstDayOfSecondDate).day);
+const getDayOfLastDateOfSecondDate = computed(() => getDateValues(lastDayOfSecondDate).day);
+
+//================================================================================
 //calculate difference in months
 const differenceInMonths = computed(() => {
-  if (dayjs(firstDate.value).isSame(dayjs(secondDate.value), "month")) {
+  if(dayjs(checkFirstDate.value).isSame(dayjs(checkSecondDate.value))) {
     return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
-  } else {
-    return dayjs(secondDate.value).diff(firstDate.value, "month");
-  }
+  } else if((dayjs(checkFirstDate.value) && dayjs(checkSecondDate.value)) === false && 
+  (dayjs(secondDate.value).diff(firstDate.value, "month")-1) < 0) {
+    return 0
+  } else if ((dayjs(checkFirstDate.value) && dayjs(checkSecondDate.value)) === false && 
+  (dayjs(secondDate.value).diff(firstDate.value, "month")-1) > 0){
+    return dayjs(secondDate.value).diff(firstDate.value, "month") - 1;
+  } else if ((dayjs(checkFirstDate.value) === false && dayjs(checkSecondDate.value)=== true) &&
+   (getMonthOfFirstDay === getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+    && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)<=31) {
+      return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
+  } else if ((dayjs(checkFirstDate.value) === false && dayjs(checkSecondDate.value)=== true) &&
+   (getMonthOfFirstDay === getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+    && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)>=31) {
+      return dayjs(secondDate.value).diff(firstDate.value, "month");
+  } 
 });
 
 //================================================================================
@@ -84,22 +113,6 @@ const getYear = computed(() =>
 const midYearDate = computed(() => `05/15/${getYear.value}`);
 const yearEndDate = computed(() => `10/31/${getYear.value}`);
 
-//================================================================================
-//get month and day of given dates
-const getDateValues = (date) => {
-  return {
-    month: dayjs(date.value).month() + 1,
-    day: dayjs(date.value).date(),
-  };
-}
-
-const getMonthOfFirstDay = computed(() => getDateValues(firstDate).month);
-const getDayOfFirstDate = computed(() => getDateValues(firstDate).day);
-const getDayOfLastDateOfFirstDate = computed(() => getDateValues(lastDayOfFirstDate).day);
-const getMonthOfSecondDay = computed(() => getDateValues(secondDate).month);
-const getDayOfSecondDate = computed(() => getDateValues(secondDate).day);
-const getDayOfFirstDateOfSecondDate = computed(() => getDateValues(firstDayOfSecondDate).day);
-const getDayOfLastDateOfSecondDate = computed(() => getDateValues(lastDayOfSecondDate).day);
 
 //================================================================================
 //compute business days
@@ -273,6 +286,63 @@ const totalDeduction = computed(() => {
 const netAmount = computed(() => {
       return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
     });
+
+
+//my noob testing
+console.log("Initial Differential Amount:",initialDifferentialAmount.value)
+console.log("First Day of First Date:",firstDayOfFirstDate.value)
+console.log("Last Day of First Date:",lastDayOfFirstDate.value)
+console.log("First Day of Second Date",firstDayOfSecondDate.value)
+console.log("Last Day of Second Date",lastDayOfSecondDate.value)
+console.log("First Day of Month?",checkFirstDate.value)
+console.log("Last Day of Month?",checkSecondDate.value)
+console.log("Difference in Months:", differenceInMonths.value)
+console.log("Total Calendar Days of First Date", totalCalendarDaysFirst.value)
+console.log("Total Calendar Days of Second Date", totalCalendarDaysSecond.value)
+console.log("Total number days of in a month of the first date:", fullMonthOfFirstDay.value)
+console.log("Total number days of in a month of the second date:", fullMonthOfSecondDay.value)
+console.log("Year:", getYear.value)
+console.log("Mid Year date",midYearDate.value)
+console.log("Year End date",yearEndDate.value)
+console.log("Get month of first day",getMonthOfFirstDay.value )
+console.log("Get day of first day",getDayOfFirstDate.value )
+console.log("Get day of the last of the month of the first date haha!",getDayOfLastDateOfFirstDate.value )
+console.log("Get month of second date",getMonthOfSecondDay.value )
+console.log("Get the day of the second",getDayOfSecondDate.value )
+console.log("Get day of second day",getDayOfFirstDateOfSecondDate.value )
+console.log("Get day of the last of the month of the second date",getDayOfLastDateOfSecondDate.value )
+console.log("Get business days of first date:", businessDaysFirstDate.value)
+console.log("Get business days of second date:", businessDaysSecondDate.value)
+console.log("Mid Year Eligible?", midYearEligible.value)
+console.log("Year End Eligible?", yearEndEligible.value)
+console.log("What's the tax percentage?", taxPercentage.value)
+console.log("Actual Differential", calculatedDifferential.value)
+console.log("SD Bonus", sdBonus.value)
+console.log("Gross Salary Differential",grossSalDiff.value)
+console.log("GSIS PS", gsisPS.value)
+console.log("GSIS GS", gsisGS.value)
+console.log("GSIS PS Share", gsisPshare.value)
+console.log("GSIS GS Share", gsisGshare.value)
+console.log("Less GSIS", lessGsis.value)
+console.log("withholding tax", withholdingTax.value)
+console.log("total deduction", totalDeduction.value)
+console.log("net amout", netAmount.value)
+
+const importantVariables = [
+    formattedProperSalary.value,
+    formattedCurrentSalary.value,
+    formattedInitialDifferentialAmount.value,
+    formattedCalculatedDifferential.value,
+    formattedSdBonus.value,
+    formattedGrossSalDiff.value,
+    formattedGsisPshare.value,
+    formattedGsisGshare.value,
+    formattedLessGsis.value,
+    formattedWithholdingTax.value
+];
+
+console.log(importantVariables);
+
 
 
 </script>
