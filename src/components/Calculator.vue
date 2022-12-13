@@ -288,7 +288,6 @@ const gsisGshare = computed(() => {
     share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisGS.value;
     share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisGS.value;
   }
-
   return share;
 });
 
@@ -334,56 +333,60 @@ const netAmount = computed(() => {
 </script>
 
 <template>
-  <form>
-    <label>Current Salary:</label>
-    <input type="number" v-model="currentSalary" />
-    <br />
-    <label>Actual Salary:</label>
-    <input type="number" v-model="properSalary" />
-    <br />
-    <p>Period Covered</p>
-    <label>From:</label>
-    <input placeholder="from" v-model="firstDate" />
-    <br />
-    <label>To:</label>
-    <input placeholder="to" v-model="secondDate" />
-    <br />
-    <button type="submit">Calculate Differential</button>
+  <div class="flex justify-center items-center w-screen h-screen">
+    <form class="flex flex-col justify-start items-start w-1/2 h-full border border-red-500">
+      <p class="flex w-full justify-center mb-4 font-bold text-2xl">Salary</p>
+      <label>Current Salary:</label>
+      <input placeholder="Current Salary" v-model="currentSalary" class="border border-gray-300 rounded-md p-2" />
+      <br />
+      <label>Actual Salary:</label>
+      <input placeholder="Actual" v-model="properSalary" class="border border-gray-300 rounded-md p-2" />
+      <br />
+      <p class="flex w-full justify-center mb-4 font-bold text-2xl">Period Covered</p>
+      <label>From:</label>
+      <input placeholder="from" v-model="firstDate" class="border border-gray-300 rounded-md p-2" />
+      <br />
+      <label>To:</label>
+      <input placeholder="to" v-model="secondDate" class="border border-gray-300 rounded-md p-2" />
+      <br />
+      <button type="submit">Calculate Differential</button>
   </form>
-
-  <div class="">
-  <table class="flex">
-    <tr class="flex flex-col text-left">
-      <th>Current Salary</th>
-      <th>Actual Salary</th>
-      <th>Amount</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Total Gross Differential Amount</th>
-      <th>SD Bonus</th>
-      <th>Total Gross + SD Bonus</th>
-      <th>GSIS</th>
-      <th>Less GSIS</th>
-      <th>Withholding Tax</th>
-      <th>Total Deduction</th>
-      <th>Net Amount</th>
-    </tr>
-    <tr class="flex flex-col">
-      <td>{{formattedCurrentSalary}}</td>
-      <td>{{formattedProperSalary}}</td>
-      <td>{{formattedInitialDifferentialAmount}}</td>
-      <td>{{firstDate}}</td>
-      <td>{{secondDate}}</td>
-      <td>{{formattedGrossSalDiff}}</td>
-      <td>{{formattedSdBonus}}</td>
-      <td>{{formattedGrossSalDiff}}</td>
-      <td>{{formattedGsisPshare}}</td>
-      <td>{{formattedLessGsis}}</td>
-      <td>{{formattedWithholdingTax}}</td>
-      <td>{{totalDeduction}}</td>
-      <td>{{netAmount}}</td>
-    </tr>
-
+    <div class="">
+    <table class="flex">
+      <tr class="flex flex-col text-left">
+        <th>Current Salary</th>
+        <th>Actual Salary</th>
+        <th>Amount</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Total Gross Differential Amount</th>
+        <th>SD Bonus</th>
+        <th>Total Gross + SD Bonus</th>
+        <th>GSIS</th>
+        <th>Less GSIS</th>
+        <th>Withholding Tax</th>
+        <th>Total Deduction</th>
+        <th>Net Amount</th>
+      </tr>
+      <tr class="flex flex-col">
+        <td>{{formattedCurrentSalary}}</td>
+        <td>{{formattedProperSalary}}</td>
+        <td>{{formattedInitialDifferentialAmount}}</td>
+        <td>{{formattedFirstDate}}</td>
+        <td>{{formattedSecondDate}}</td>
+        <td>{{formattedCalculatedDifferential}}</td>
+        <td>{{formattedSdBonus}}</td>
+        <td>{{formattedGrossSalDiff}}</td>
+        <td>{{formattedGsisPshare}}</td>
+        <td>{{formattedLessGsis}}</td>
+        <td>{{formattedWithholdingTax}}</td>
+        <td>{{totalDeduction}}</td>
+        <td>{{netAmount}}</td>
+      </tr>
   </table>
 </div>
+  </div>
+
+
+
 </template>
