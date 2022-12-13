@@ -329,12 +329,12 @@ const totalDeduction = computed(() => {
 const netAmount = computed(() => {
       return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
     });
-
 </script>
 
+
 <template>
-  <div class="flex justify-center items-center w-screen h-screen">
-    <form class="flex flex-col justify-start items-start w-1/2 h-full border border-red-500">
+  <div class="flex flex-col lg:flex-row justify-center items-center w-screen h-auto">
+    <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-screen">
       <p class="flex w-full justify-center mb-4 font-bold text-2xl">Salary</p>
       <label>Current Salary:</label>
       <input placeholder="Current Salary" v-model="currentSalary" class="border border-gray-300 rounded-md p-2" />
@@ -351,9 +351,10 @@ const netAmount = computed(() => {
       <br />
       <button type="submit">Calculate Differential</button>
   </form>
-    <div class="">
-    <table class="flex">
-      <tr class="flex flex-col text-left">
+
+    <div class="flex justify-center w-full md:w-1/2 h-screen border border-red-500">
+    <table class="flex items-center gap-2 md:gap-10">
+      <tr class="flex flex-col text-left  gap-y-3">
         <th>Current Salary</th>
         <th>Actual Salary</th>
         <th>Amount</th>
@@ -368,7 +369,7 @@ const netAmount = computed(() => {
         <th>Total Deduction</th>
         <th>Net Amount</th>
       </tr>
-      <tr class="flex flex-col">
+      <tr class="flex flex-col text-right gap-y-3">
         <td>{{formattedCurrentSalary}}</td>
         <td>{{formattedProperSalary}}</td>
         <td>{{formattedInitialDifferentialAmount}}</td>
@@ -383,10 +384,7 @@ const netAmount = computed(() => {
         <td>{{totalDeduction}}</td>
         <td>{{netAmount}}</td>
       </tr>
-  </table>
-</div>
+    </table>
   </div>
-
-
-
+</div>
 </template>
