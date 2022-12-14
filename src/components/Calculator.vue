@@ -333,28 +333,34 @@ const netAmount = computed(() => {
 
 
 <template>
-  <div class="flex flex-col lg:flex-row justify-center items-center w-screen h-auto">
-    <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-screen">
-      <p class="flex w-full justify-center mb-4 font-bold text-2xl">Salary</p>
-      <label>Current Salary:</label>
-      <input placeholder="Current Salary" v-model="currentSalary" class="border border-gray-300 rounded-md p-2" />
-      <br />
-      <label>Actual Salary:</label>
-      <input placeholder="Actual" v-model="properSalary" class="border border-gray-300 rounded-md p-2" />
-      <br />
-      <p class="flex w-full justify-center mb-4 font-bold text-2xl">Period Covered</p>
-      <label>From:</label>
-      <input placeholder="from" v-model="firstDate" class="border border-gray-300 rounded-md p-2" />
-      <br />
-      <label>To:</label>
-      <input placeholder="to" v-model="secondDate" class="border border-gray-300 rounded-md p-2" />
-      <br />
-      <button type="submit">Calculate Differential</button>
-  </form>
 
-    <div class="flex justify-center w-full md:w-1/2 h-screen border border-red-500">
-    <table class="flex items-center gap-2 md:gap-10">
-      <tr class="flex flex-col text-left  gap-y-3">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
+    <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
+      <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-full">
+        <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
+          <p class="flex w-full justify-center font-bold text-xl">Salary</p>
+          <label>Current Salary:</label>
+          <input placeholder="Current Salary" v-model="currentSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <br />
+          <label>Actual Salary:</label>
+          <input placeholder="Actual" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <br />
+          <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
+          <label>From:</label>
+          <input placeholder="from" v-model="firstDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <br />
+          <label>To:</label>
+          <input placeholder="to" v-model="secondDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <br />
+          <button type="submit" class="text-white text-center w-3/4 py-2 bg-black border rounded-lg">Calculate</button>
+      </form>
+    </div>
+    <div class="col-span-1 flex flex-col justify-start items-center h-screen">
+      <div class="flex flex-col gap-2 w-auto h-full">
+        <p class="flex w-full justify-start pt-10 font-bold text-2xl">Results</p>
+      <table class="flex justify-center items-center gap-2">
+      <tr class="flex flex-col text-left gap-y-2">
         <th>Current Salary</th>
         <th>Actual Salary</th>
         <th>Amount</th>
@@ -369,7 +375,7 @@ const netAmount = computed(() => {
         <th>Total Deduction</th>
         <th>Net Amount</th>
       </tr>
-      <tr class="flex flex-col text-right gap-y-3">
+      <tr class="flex flex-col text-right gap-y-2">
         <td>{{formattedCurrentSalary}}</td>
         <td>{{formattedProperSalary}}</td>
         <td>{{formattedInitialDifferentialAmount}}</td>
@@ -385,6 +391,12 @@ const netAmount = computed(() => {
         <td>{{netAmount}}</td>
       </tr>
     </table>
+    <div class="flex justify-center items-center">
+      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Copy</button>
+      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Edit</button>
+    </div>
+      </div>
+ 
+    </div>
   </div>
-</div>
 </template>
