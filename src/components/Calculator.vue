@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watchEffect, onMounted } from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
 
@@ -9,6 +9,11 @@ const currentSalary = ref(0);
 const properSalary = ref(0);
 const firstDate = ref("mm/dd/yyyy");
 const secondDate = ref("mm/dd/yyyy");
+
+
+onMounted(()=> {
+  currentSalary.value.focus()
+})
 
 //=================================================================================
 // get initial differential amount
@@ -333,15 +338,13 @@ const netAmount = computed(() => {
 
 
 <template>
-
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
       <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-full">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
-          <input placeholder="Current Salary" v-model="currentSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <input placeholder="Current Salary" v-model="currentSalary" ref="currentSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <br />
           <label>Actual Salary:</label>
           <input placeholder="Actual" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
@@ -393,10 +396,9 @@ const netAmount = computed(() => {
     </table>
     <div class="flex justify-center items-center">
       <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Copy</button>
-      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Edit</button>
+      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Reset</button>
     </div>
       </div>
- 
     </div>
   </div>
 </template>
