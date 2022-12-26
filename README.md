@@ -1,7 +1,5 @@
-# Vue 3 + Vite
+SALARY DIFFERENTIAL CALCULATOR
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+I created this tool to simplify the computation of salary differential of employees in the Division of Aklan.
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+One of the most tedious parts of our job is to process salary differential payrolls. I also think that we the same problem with other divisions in our Region or even other Regions in the country. 

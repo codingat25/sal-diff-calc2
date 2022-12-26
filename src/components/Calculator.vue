@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, watchEffect, onMounted } from "vue";
+import { ref, computed, onMounted} from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
+import { numberLiteralTypeAnnotation } from "@babel/types";
 
 dayjs.extend(dayBusinessDays);
 
@@ -9,11 +10,20 @@ const currentSalary = ref(0);
 const properSalary = ref(0);
 const firstDate = ref("mm/dd/yyyy");
 const secondDate = ref("mm/dd/yyyy");
+const formattedValue = computed(()=>{
+  return currentSalary.value.toLocaleString()
+})
 
+
+function formatValue(event) {
+  currentSalary.value = event.target.value.replace(/,/g,'')
+}
 
 onMounted(()=> {
-  currentSalary.value.focus()
+  // formattedValue.value.focus()
+  formattedValue.value = currentSalary.value.toString().replace(/(?<=\d)(?=(\d{3})+$)|(?<=\d)(?=(\d{3})+(\d{3})+$)/g, (match, p1, p2) => p2 ? '.' : ',')
 })
+
 
 //=================================================================================
 // get initial differential amount
@@ -128,7 +138,6 @@ const differenceInMonths = computed(() => {
     return endMonth - startMonth;
   }
 });
-
 
 //================================================================================
 //calculate total calendar days
@@ -324,6 +333,7 @@ const formattedGsisGshare = computed(() => round(gsisGshare.value, 2));
 const formattedLessGsis = computed(() => round(lessGsis.value, 2));
 const formattedWithholdingTax = computed(() => round(withholdingTax.value, 2));
 
+
 //==================================================================================
 //finally the basic deductions 
 
@@ -338,25 +348,21 @@ const netAmount = computed(() => {
 
 
 <template>
+  <div ref="el"></div>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
       <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-full">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
-          <input placeholder="Current Salary" v-model="currentSalary" ref="currentSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <br />
+          <input v-model="formattedValue" @input="formatInput" placeholder="Current Salary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
           <label>Actual Salary:</label>
-          <input placeholder="Actual" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <br />
+          <input placeholder="Actual Salary" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
           <label>From:</label>
           <input placeholder="from" v-model="firstDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <br />
           <label>To:</label>
           <input placeholder="to" v-model="secondDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <br />
-          <button type="submit" class="text-white text-center w-3/4 py-2 bg-black border rounded-lg">Calculate</button>
       </form>
     </div>
     <div class="col-span-1 flex flex-col justify-start items-center h-screen">
