@@ -1,8 +1,7 @@
 <script setup>
-import { ref, computed, onMounted} from "vue";
+import { ref, computed, onMounted, watchEffect} from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
-import { numberLiteralTypeAnnotation } from "@babel/types";
 
 dayjs.extend(dayBusinessDays);
 
@@ -10,19 +9,6 @@ const currentSalary = ref(0);
 const properSalary = ref(0);
 const firstDate = ref("mm/dd/yyyy");
 const secondDate = ref("mm/dd/yyyy");
-const formattedValue = computed(()=>{
-  return currentSalary.value.toLocaleString()
-})
-
-
-function formatValue(event) {
-  currentSalary.value = event.target.value.replace(/,/g,'')
-}
-
-onMounted(()=> {
-  // formattedValue.value.focus()
-  formattedValue.value = currentSalary.value.toString().replace(/(?<=\d)(?=(\d{3})+$)|(?<=\d)(?=(\d{3})+(\d{3})+$)/g, (match, p1, p2) => p2 ? '.' : ',')
-})
 
 
 //=================================================================================
@@ -316,22 +302,15 @@ const withholdingTax = computed(() => {
 });
 
 //==================================================================================
-//format all data to two decimal places
-
+//format all data to two decimal places as well as insert commas in thousands and millions place
 const round = (num, decimalPlaces) => Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+const formatComma = (num) => {
+  watchEffect(()=> 
+    num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
+    num.value = parseInt(num.value.replace(/,/g, ''))
+  }
 
-const formattedProperSalary = computed(() => round(properSalary.value, 2));
-const formattedCurrentSalary = computed(() => round(currentSalary.value, 2));
-const formattedFirstDate = computed(() => dayjs(firstDate.value).format("MM/DD/YYYY"))
-const formattedSecondDate = computed(() => dayjs(secondDate.value).format("MM/DD/YYYY"))
-const formattedInitialDifferentialAmount = computed(() => round(initialDifferentialAmount.value, 2));
-const formattedCalculatedDifferential = computed(() => round(calculatedDifferential.value, 2));
-const formattedSdBonus = computed(() => round(sdBonus.value, 2));
-const formattedGrossSalDiff = computed(() => round(grossSalDiff.value, 2));
-const formattedGsisPshare = computed(() => round(gsisPshare.value, 2));
-const formattedGsisGshare = computed(() => round(gsisGshare.value, 2));
-const formattedLessGsis = computed(() => round(lessGsis.value, 2));
-const formattedWithholdingTax = computed(() => round(withholdingTax.value, 2));
+formatComma(currentSalary)
 
 
 //==================================================================================
@@ -355,7 +334,7 @@ const netAmount = computed(() => {
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
-          <input v-model="formattedValue" @input="formatInput" placeholder="Current Salary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <input placeholder="Current Salary" v-model="currentSalary" @input="formatInput" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <label>Actual Salary:</label>
           <input placeholder="Actual Salary" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
@@ -386,18 +365,7 @@ const netAmount = computed(() => {
       </tr>
       <tr class="flex flex-col text-right gap-y-2">
         <td>{{formattedCurrentSalary}}</td>
-        <td>{{formattedProperSalary}}</td>
-        <td>{{formattedInitialDifferentialAmount}}</td>
-        <td>{{formattedFirstDate}}</td>
-        <td>{{formattedSecondDate}}</td>
-        <td>{{formattedCalculatedDifferential}}</td>
-        <td>{{formattedSdBonus}}</td>
-        <td>{{formattedGrossSalDiff}}</td>
-        <td>{{formattedGsisPshare}}</td>
-        <td>{{formattedLessGsis}}</td>
-        <td>{{formattedWithholdingTax}}</td>
-        <td>{{totalDeduction}}</td>
-        <td>{{netAmount}}</td>
+
       </tr>
     </table>
     <div class="flex justify-center items-center">
