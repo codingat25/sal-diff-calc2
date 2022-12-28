@@ -304,13 +304,16 @@ const withholdingTax = computed(() => {
 //==================================================================================
 //format all data to two decimal places as well as insert commas in thousands and millions place
 const round = (num, decimalPlaces) => Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
-const formatComma = (num) => {
-  watchEffect(()=> 
-    num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
-    num.value = parseInt(num.value.replace(/,/g, ''))
-  }
+const formattedCurrentSalary = computed(()=> {return (round(currentSalary.value,2))})
 
-formatComma(currentSalary)
+
+// const formatComma = (num) => {
+//   watchEffect(()=> 
+//     num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
+//     num.value = parseInt(num.value.replace(/,/g, ''))
+//   }
+
+
 
 
 //==================================================================================
@@ -334,7 +337,7 @@ const netAmount = computed(() => {
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
-          <input placeholder="Current Salary" v-model="currentSalary" @input="formatInput" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <input placeholder="Current Salary" v-model="currentSalary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
           <label>Actual Salary:</label>
           <input placeholder="Actual Salary" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
@@ -364,7 +367,20 @@ const netAmount = computed(() => {
         <th>Net Amount</th>
       </tr>
       <tr class="flex flex-col text-right gap-y-2">
-        <td>{{formattedCurrentSalary}}</td>
+        <td>{{ formattedCurrentSalary }}</td>
+        <td>{{  }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        <td>{{ currentSalary }}</td>
+        
 
       </tr>
     </table>
