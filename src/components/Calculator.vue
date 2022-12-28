@@ -14,9 +14,10 @@ const secondDate = ref("mm/dd/yyyy");
 //=================================================================================
 // get initial differential amount
 const initialDifferentialAmount = computed(() => {
-  return Math.max(0, properSalary.value - currentSalary.value);
+  const properSalaryValue = parseFloat(properSalary.value.toString().replace(/[^0-9.]/g, ''));
+  const currentSalaryValue = parseFloat(currentSalary.value.toString().replace(/[^0-9.]/g, ''));
+  return isNaN(properSalaryValue) || isNaN(currentSalaryValue) ? 0 : Math.max(0, properSalaryValue - currentSalaryValue);
 });
-
 
 //=================================================================================
 // check the first day and last day of dates given
@@ -303,17 +304,50 @@ const withholdingTax = computed(() => {
 
 //==================================================================================
 //format all data to two decimal places as well as insert commas in thousands and millions place
+
+
 const round = (num, decimalPlaces) => Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
-const formattedCurrentSalary = computed(()=> {return (round(currentSalary.value,2))})
 
+const formatComma = (num) => {
+  watchEffect(()=> 
+    num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
+    num.value = parseFloat(num.value.replace(/,/g, ''))
+  }
 
-// const formatComma = (num) => {
-//   watchEffect(()=> 
-//     num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
-//     num.value = parseInt(num.value.replace(/,/g, ''))
-//   }
+const formattedCurrentSalary = ()=> formatComma(currentSalary)
+const formattedProperSalary = ()=> formatComma(properSalary)
 
+const formattedInitialDifferentialAmount = computed(() => {
+  return isNaN(initialDifferentialAmount.value) ? 0 : parseFloat(round(initialDifferentialAmount.value, 2));
+});
 
+const formattedCalculatedDifferential = computed(()=> {
+  return isNaN(calculatedDifferential.value) ? 0 : parseFloat(round(calculatedDifferential.value,2))
+})
+
+const formattedGsisPshare = computed(()=> {
+  return isNaN(gsisPshare.value) ? 0 : parseFloat(round(gsisPshare.value,2))
+})
+
+const formattedGsisGshare = computed(()=> {
+  return isNaN(gsisGshare.value) ? 0 : parseFloat(round(gsisGshare.value,2))
+})
+
+const formattedWithholdingTax = computed(()=> {
+  return isNaN(withholdingTax.value) ? 0 : parseFloat(round(withholdingTax.value,2))
+})
+
+const formattedGrossSalDiff = computed(()=> {
+  return isNaN(grossSalDiff.value) ? 0 : parseFloat(round(grossSalDiff.value,2))
+})
+
+const formattedSDBonus = computed(()=>{
+  return isNaN(sdBonus.value) ? 0 : parseFloat(round(sdBonus.value,2))
+})
+
+const formattedLessGsis = computed(()=>{
+  return isNaN(lessGsis.value) ? 0 : parseFloat(round(lessGsis.value,2))
+})
 
 
 //==================================================================================
@@ -330,16 +364,15 @@ const netAmount = computed(() => {
 
 
 <template>
-  <div ref="el"></div>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
       <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-full">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
-          <input placeholder="Current Salary" v-model="currentSalary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <input placeholder="Current Salary" v-model="currentSalary" @input="formattedCurrentSalary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
           <label>Actual Salary:</label>
-          <input placeholder="Actual Salary" v-model="properSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
+          <input placeholder="Actual Salary" v-model="properSalary" @input="formattedProperSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
           <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
           <label>From:</label>
           <input placeholder="from" v-model="firstDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
@@ -367,21 +400,19 @@ const netAmount = computed(() => {
         <th>Net Amount</th>
       </tr>
       <tr class="flex flex-col text-right gap-y-2">
-        <td>{{ formattedCurrentSalary }}</td>
-        <td>{{  }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        <td>{{ currentSalary }}</td>
-        
-
+        <td>{{currentSalary.toLocaleString('en-PH') }}</td>
+        <td>{{properSalary.toLocaleString('en-PH') }}</td>
+        <td>{{formattedInitialDifferentialAmount.toLocaleString('en-PH') }}</td>
+        <td>{{firstDate.toLocaleString('en-PH')}}</td>
+        <td>{{secondDate.toLocaleString('en-PH')}}</td>
+        <td>{{formattedCalculatedDifferential.toLocaleString('en-PH')}}</td>
+        <td>{{formattedSDBonus.toLocaleString('en-PH')}}</td>
+        <td>{{formattedGrossSalDiff.toLocaleString('en-PH')}}</td>
+        <td>{{formattedGsisPshare.toLocaleString('en-PH') }}</td>
+        <td>{{formattedLessGsis.toLocaleString('en-PH') }}</td>
+        <td>{{formattedWithholdingTax.toLocaleString('en-PH') }}</td>
+        <td>{{totalDeduction.toLocaleString('en-PH') }}</td>
+        <td>{{netAmount.toLocaleString('en-PH') }}</td>
       </tr>
     </table>
     <div class="flex justify-center items-center">
