@@ -5,10 +5,10 @@ import dayBusinessDays from "dayjs-business-days";
 
 dayjs.extend(dayBusinessDays);
 
-const currentSalary = ref(0);
-const properSalary = ref(0);
-const firstDate = ref("mm/dd/yyyy");
-const secondDate = ref("mm/dd/yyyy");
+const currentSalary = ref('');
+const properSalary = ref('');
+const firstDate = ref('');
+const secondDate = ref('');
 
 
 //=================================================================================
@@ -364,9 +364,15 @@ const netAmount = computed(() => {
 
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
+<div class="flex justify-center items-center w-full h-auto">
+
+</div>
+
+
+
+ <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
-      <form class="flex flex-col justify-center items-center w-full md:w-1/2 h-full">
+      <form class="flex flex-col justify-start items-center w-full md:w-1/2 h-full gap-3">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
           <p class="flex w-full justify-center font-bold text-xl">Salary</p>
           <label>Current Salary:</label>
@@ -385,34 +391,34 @@ const netAmount = computed(() => {
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Results</p>
       <table class="flex justify-center items-center gap-2">
       <tr class="flex flex-col text-left gap-y-2">
-        <th>Current Salary</th>
-        <th>Actual Salary</th>
-        <th>Amount</th>
-        <th>From</th>
-        <th>To</th>
-        <th>Total Gross Differential Amount</th>
-        <th>SD Bonus</th>
-        <th>Total Gross + SD Bonus</th>
-        <th>GSIS</th>
-        <th>Less GSIS</th>
-        <th>Withholding Tax</th>
-        <th>Total Deduction</th>
-        <th>Net Amount</th>
+        <th class="h-[1%]">Current Salary</th>
+        <th class="h-[1%]">Actual Salary</th>
+        <th class="h-[1%]">Amount</th>
+        <th class="h-[1%]">From</th>
+        <th class="h-[1%]">To</th>
+        <th class="h-[1%]">Total Gross Differential Amount</th>
+        <th class="h-[1%]">SD Bonus</th>
+        <th class="h-[1%]">Total Gross + SD Bonus</th>
+        <th class="h-[1%]">GSIS</th>
+        <th class="h-[1%]">Less GSIS</th>
+        <th class="h-[1%]">Withholding Tax</th>
+        <th class="h-[1%]">Total Deduction</th>
+        <th class="h-[1%]">Net Amount</th>
       </tr>
       <tr class="flex flex-col text-right gap-y-2">
-        <td>{{currentSalary.toLocaleString('en-PH') }}</td>
-        <td>{{properSalary.toLocaleString('en-PH') }}</td>
-        <td>{{formattedInitialDifferentialAmount.toLocaleString('en-PH') }}</td>
-        <td>{{firstDate.toLocaleString('en-PH')}}</td>
-        <td>{{secondDate.toLocaleString('en-PH')}}</td>
-        <td>{{formattedCalculatedDifferential.toLocaleString('en-PH')}}</td>
-        <td>{{formattedSDBonus.toLocaleString('en-PH')}}</td>
-        <td>{{formattedGrossSalDiff.toLocaleString('en-PH')}}</td>
-        <td>{{formattedGsisPshare.toLocaleString('en-PH') }}</td>
-        <td>{{formattedLessGsis.toLocaleString('en-PH') }}</td>
-        <td>{{formattedWithholdingTax.toLocaleString('en-PH') }}</td>
-        <td>{{totalDeduction.toLocaleString('en-PH') }}</td>
-        <td>{{netAmount.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{currentSalary.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{properSalary.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{formattedInitialDifferentialAmount.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{firstDate.toLocaleString('en-PH')}}</td>
+        <td class="h-[1%]">{{secondDate.toLocaleString('en-PH')}}</td>
+        <td class="h-[1%]">{{formattedCalculatedDifferential.toLocaleString('en-PH')}}</td>
+        <td class="h-[1%]">{{formattedSDBonus.toLocaleString('en-PH')}}</td>
+        <td class="h-[1%]">{{formattedGrossSalDiff.toLocaleString('en-PH')}}</td>
+        <td class="h-[1%]">{{formattedGsisPshare.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{formattedLessGsis.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{formattedWithholdingTax.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{totalDeduction.toLocaleString('en-PH') }}</td>
+        <td class="h-[1%]">{{netAmount.toLocaleString('en-PH') }}</td>
       </tr>
     </table>
     <div class="flex justify-center items-center">
@@ -421,5 +427,5 @@ const netAmount = computed(() => {
     </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
