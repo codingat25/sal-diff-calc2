@@ -457,7 +457,7 @@ const netAmount = computed(() => {
     <div class="px-5 gap-3 block md:flex w-full h-full">
       <div class="w-full md:w-2/5 pb-2">
         <div
-          class="w-full min-h-auto md:h-auto lg:h-full pb-16 bg-white border border-gray-700 rounded-md"
+          class="w-full min-h-auto md:h-auto lg:h-full pb-28 bg-white border border-gray-700 rounded-md"
         >
           <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">
             Input
@@ -473,7 +473,8 @@ const netAmount = computed(() => {
               type="text"
               class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
             />
-            <label for="" class="pt-5 text-xl">From</label>
+            <label for="" class="pt-5 text-xl">From <br>
+              <i class="font-base text-sky-700 text-sm">(duration of unpaid salary differential)</i></label>
             <input
               type="text"
               class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
@@ -572,7 +573,7 @@ const netAmount = computed(() => {
                     <td>25,439</td>
                   </tr>
                   <tr
-                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44"
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Net Differential</th>
                     <td>25,439</td>
@@ -581,6 +582,8 @@ const netAmount = computed(() => {
               </table>
             </div>
           </div>
+          <div class="pb-5 flex justify-center w-full h-auto">
+            <button class="w-52 h-10 bg-sky-700 rounded-md text-white font-semibold">COPY</button> </div>
         </div>
       </div>
     </div>
