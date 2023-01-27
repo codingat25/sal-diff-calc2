@@ -9,6 +9,9 @@ module.exports = {
       gridTemplateRows: {
         '13': 'repeat(13, minmax(0, 1fr))'
       },
+      fontFamily: {
+        'sans': ['Poppins', 'sans']
+      },
     },
   },
   plugins: [],

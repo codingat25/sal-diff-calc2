@@ -364,7 +364,35 @@ const netAmount = computed(() => {
 
 
 <template>
-<div class="flex flex-col md:flex-row  justify-center items-center w-full h-auto">
+
+<div class="block md:flex flex-col w-full h-auto bg-gray-200">
+  <h1 class="p-2 font-bold text-5xl text-center text-gray-700">Salary Differential Calculator</h1>
+  <div class="px-5 gap-3 block md:flex w-full h-full">
+    <div class="w-full h-full pb-2">
+     <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
+      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-700">Input</h2>
+        <form action="" class="pl-5 pt-2 flex flex-col">
+          <label for="" class="pt-5 text-xl">Current Salary</label>
+          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <label for="" class="pt-5 text-xl">Actual Salary</label>
+          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <label for="" class="pt-5 text-xl">From</label>
+          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <label for="" class="pt-5 text-xl">To</label>
+          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+        </form>
+     </div>
+    </div>
+    <div class="w-full h-full pb-2">
+     <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
+      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-700">Results</h2>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <div class="flex flex-col md:flex-row  justify-center items-center w-full h-auto">
     <div class="flex justify-center items-center w-full h-screen">
       <div class="bg-white w-full h-full lg:w-[90%] md:h-[90%]">
         <div class="w-full h-auto p-2 bg-violet-700 text-white font-bold text-lg rounded-lg">Input</div>
@@ -428,9 +456,7 @@ const netAmount = computed(() => {
 
       </div>
     </div>
-</div>
-
-
+</div> -->
  <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
       <form class="flex flex-col justify-start items-center w-full md:w-1/2 h-full gap-3">
@@ -447,6 +473,7 @@ const netAmount = computed(() => {
           <input placeholder="to" v-model="secondDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
       </form>
     </div>
+    
     <div class="col-span-1 flex flex-col justify-start items-center h-screen">
       <div class="flex flex-col gap-2 w-auto h-full">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Results</p>
