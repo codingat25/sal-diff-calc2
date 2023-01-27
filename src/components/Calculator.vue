@@ -1,36 +1,49 @@
 <script setup>
-import { ref, computed, onMounted, watchEffect} from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
 
 dayjs.extend(dayBusinessDays);
 
-const currentSalary = ref('');
-const properSalary = ref('');
-const firstDate = ref('');
-const secondDate = ref('');
-
+const currentSalary = ref("");
+const properSalary = ref("");
+const firstDate = ref("");
+const secondDate = ref("");
 
 //=================================================================================
 // get initial differential amount
 const initialDifferentialAmount = computed(() => {
-  const properSalaryValue = parseFloat(properSalary.value.toString().replace(/[^0-9.]/g, ''));
-  const currentSalaryValue = parseFloat(currentSalary.value.toString().replace(/[^0-9.]/g, ''));
-  return isNaN(properSalaryValue) || isNaN(currentSalaryValue) ? 0 : Math.max(0, properSalaryValue - currentSalaryValue);
+  const properSalaryValue = parseFloat(
+    properSalary.value.toString().replace(/[^0-9.]/g, "")
+  );
+  const currentSalaryValue = parseFloat(
+    currentSalary.value.toString().replace(/[^0-9.]/g, "")
+  );
+  return isNaN(properSalaryValue) || isNaN(currentSalaryValue)
+    ? 0
+    : Math.max(0, properSalaryValue - currentSalaryValue);
 });
 
 //=================================================================================
 // check the first day and last day of dates given
 // kung tanawon mo do pattern, maubra anay imaw it sangka utility function para gamiton it ibang functions
 const firstAndLastDay = (date, startOrEnd) => {
-  const formattedDate = dayjs(date.value)[startOrEnd]("month").format("MM/DD/YYYY"); //The square bracket notation (e.g. [startOrEnd]) is used in this code to access a property or method on an object dynamically, based on the value of the startOrEnd argument. This is known as computed property names in JavaScript, and it allows you to access properties on an object using a variable or expression instead of a static string.
+  const formattedDate = dayjs(date.value)
+    [startOrEnd]("month")
+    .format("MM/DD/YYYY"); //The square bracket notation (e.g. [startOrEnd]) is used in this code to access a property or method on an object dynamically, based on the value of the startOrEnd argument. This is known as computed property names in JavaScript, and it allows you to access properties on an object using a variable or expression instead of a static string.
   return formattedDate === "Invalid Date" ? 0 : formattedDate;
-}
+};
 
-const firstDayOfFirstDate = computed(() => firstAndLastDay(firstDate, "startOf"));
+const firstDayOfFirstDate = computed(() =>
+  firstAndLastDay(firstDate, "startOf")
+);
 const lastDayOfFirstDate = computed(() => firstAndLastDay(firstDate, "endOf"));
-const firstDayOfSecondDate = computed(() => firstAndLastDay(secondDate, "startOf"));
-const lastDayOfSecondDate = computed(() => firstAndLastDay(secondDate, "endOf"));
+const firstDayOfSecondDate = computed(() =>
+  firstAndLastDay(secondDate, "startOf")
+);
+const lastDayOfSecondDate = computed(() =>
+  firstAndLastDay(secondDate, "endOf")
+);
 
 //================================================================================
 // gina-check kung do gintype sa unang date hay unang adlaw gid it buean
@@ -53,15 +66,21 @@ const getDateValues = (date) => {
     month: dayjs(date.value).month() + 1,
     day: dayjs(date.value).date(),
   };
-}
+};
 
 const getMonthOfFirstDay = computed(() => getDateValues(firstDate).month);
 const getDayOfFirstDate = computed(() => getDateValues(firstDate).day);
-const getDayOfLastDateOfFirstDate = computed(() => getDateValues(lastDayOfFirstDate).day);
+const getDayOfLastDateOfFirstDate = computed(
+  () => getDateValues(lastDayOfFirstDate).day
+);
 const getMonthOfSecondDay = computed(() => getDateValues(secondDate).month);
 const getDayOfSecondDate = computed(() => getDateValues(secondDate).day);
-const getDayOfFirstDateOfSecondDate = computed(() => getDateValues(firstDayOfSecondDate).day);
-const getDayOfLastDateOfSecondDate = computed(() => getDateValues(lastDayOfSecondDate).day);
+const getDayOfFirstDateOfSecondDate = computed(
+  () => getDateValues(firstDayOfSecondDate).day
+);
+const getDayOfLastDateOfSecondDate = computed(
+  () => getDateValues(lastDayOfSecondDate).day
+);
 
 //================================================================================
 //Difference in months
@@ -72,42 +91,41 @@ const getDayOfLastDateOfSecondDate = computed(() => getDateValues(lastDayOfSecon
 //   if(dayjs(checkFirstDate.value) && dayjs(checkSecondDate.value) === true) {
 //     console.log(1)
 //     return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
-//   } 
-//   else if((checkFirstDate.value === false && checkSecondDate.value === false) && 
+//   }
+//   else if((checkFirstDate.value === false && checkSecondDate.value === false) &&
 //   (dayjs(secondDate.value).diff(firstDate.value, "month")-1) < 0) {
 //     console.log(2)
 //     return 0
-//   } 
-//   else if((checkFirstDate.value === false && checkSecondDate.value === false) && 
+//   }
+//   else if((checkFirstDate.value === false && checkSecondDate.value === false) &&
 //   (dayjs(secondDate.value).diff(firstDate.value, "month")-1) > 0){
 //     console.log(3)
 //     return dayjs(secondDate.value).diff(firstDate.value, "month") - 1;
-//   } 
+//   }
 //   else if ((checkFirstDate.value === false && checkSecondDate.value === true) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month"))
 //     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)<=31) {
 //       console.log(4)
 //       return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
-//   } 
+//   }
 //   else if ((checkFirstDate.value === false && checkSecondDate.value === true) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month")) 
+//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month"))
 //     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)>=31) {
 //       console.log(5)
 //       return dayjs(secondDate.value).diff(firstDate.value, "month");
-//   } 
+//   }
 //   else if ((checkFirstDate.value === true && checkSecondDate.value === false) &&
 //    (getMonthOfFirstDay.value === getMonthOfSecondDay.value)) {
 //     console.log(6)
 //       return dayjs(secondDate.value).diff(firstDate.value, "month");
-//   } 
+//   }
 //   else if ((checkFirstDate.value === true && checkSecondDate.value === false) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value)) 
+//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value))
 //    {
 //     console.log(7)
 //       return dayjs(secondDate.value).diff(firstDate.value, "month");
 //   }
 // });
-
 
 //==========================================================================================
 
@@ -117,31 +135,39 @@ const differenceInMonths = computed(() => {
   const { month: endMonth, day: endDay } = getDateValues(secondDate);
   if (checkFirstDate.value && checkSecondDate.value) {
     return endMonth - startMonth + 1;
-  }
-  else if (startMonth === endMonth) {
+  } else if (startMonth === endMonth) {
     return 0;
-  }
-  else {
+  } else {
     return endMonth - startMonth;
   }
 });
 
 //================================================================================
 //calculate total calendar days
-const totalCalendarDays = (startDate, endDate) => { //Alternatively, you could use a single function to calculate the total number of calendar days, and then pass the appropriate arguments to this function to avoid repeating the same code multiple times.
+const totalCalendarDays = (startDate, endDate) => {
+  //Alternatively, you could use a single function to calculate the total number of calendar days, and then pass the appropriate arguments to this function to avoid repeating the same code multiple times.
   const days = dayjs(endDate.value).diff(startDate.value, "day") + 1; //These refactorings make the code more concise and easier to read, while also avoiding the repetition of similar code. Additionally, using a function like this can make the code more flexible and reusable, if you need to calculate the total number of calendar days in other parts of your code.
   return isNaN(days) ? 0 : days;
-}
+};
 
-const totalCalendarDaysFirst = computed(() => totalCalendarDays(firstDate, lastDayOfFirstDate));
-const totalCalendarDaysSecond = computed(() => totalCalendarDays(firstDayOfSecondDate, secondDate));
+const totalCalendarDaysFirst = computed(() =>
+  totalCalendarDays(firstDate, lastDayOfFirstDate)
+);
+const totalCalendarDaysSecond = computed(() =>
+  totalCalendarDays(firstDayOfSecondDate, secondDate)
+);
 
 //================================================================================
 //determine full month of days given
-const fullMonth = (startDate, endDate) => dayjs(endDate.value).diff(startDate.value, "day") + 1; //One way to refactor this code is to use a single function to calculate the number of days in a full month, and then pass the appropriate arguments to this function to avoid repeating the same code multiple times.
+const fullMonth = (startDate, endDate) =>
+  dayjs(endDate.value).diff(startDate.value, "day") + 1; //One way to refactor this code is to use a single function to calculate the number of days in a full month, and then pass the appropriate arguments to this function to avoid repeating the same code multiple times.
 
-const fullMonthOfFirstDay = computed(() => fullMonth(firstDayOfFirstDate, lastDayOfFirstDate));
-const fullMonthOfSecondDay = computed(() => fullMonth(firstDayOfSecondDate, lastDayOfSecondDate));
+const fullMonthOfFirstDay = computed(() =>
+  fullMonth(firstDayOfFirstDate, lastDayOfFirstDate)
+);
+const fullMonthOfSecondDay = computed(() =>
+  fullMonth(firstDayOfSecondDate, lastDayOfSecondDate)
+);
 
 //================================================================================
 //get current year
@@ -156,7 +182,6 @@ const getYear = computed(() =>
 const midYearDate = computed(() => `05/15/${getYear.value}`);
 const yearEndDate = computed(() => `10/31/${getYear.value}`);
 
-
 //================================================================================
 //compute business days
 const getBusinessDays = (month, startDay, endDay, year) => {
@@ -164,33 +189,43 @@ const getBusinessDays = (month, startDay, endDay, year) => {
   for (let i = startDay; i <= endDay; i++) {
     arrayedDates.push(`${month}/${i}/${year}`);
   }
-  return arrayedDates.filter((arrayed) => dayjs(arrayed).isBusinessDay()).length;
-}
+  return arrayedDates.filter((arrayed) => dayjs(arrayed).isBusinessDay())
+    .length;
+};
 
-const businessDaysFirstDate = computed(() => getBusinessDays(
-  getMonthOfFirstDay.value,
-  getDayOfFirstDate.value,
-  getDayOfLastDateOfFirstDate.value,
-  getYear.value
-));
+const businessDaysFirstDate = computed(() =>
+  getBusinessDays(
+    getMonthOfFirstDay.value,
+    getDayOfFirstDate.value,
+    getDayOfLastDateOfFirstDate.value,
+    getYear.value
+  )
+);
 
-const businessDaysSecondDate = computed(() => getBusinessDays(
-  getMonthOfSecondDay.value,
-  getDayOfFirstDateOfSecondDate.value,
-  getDayOfSecondDate.value,
-  getYear.value
-));
+const businessDaysSecondDate = computed(() =>
+  getBusinessDays(
+    getMonthOfSecondDay.value,
+    getDayOfFirstDateOfSecondDate.value,
+    getDayOfSecondDate.value,
+    getYear.value
+  )
+);
 
 //==================================================================================
 //check if data is eligible for mid-year and year-end
 const midYearEligible = computed(() => {
-  return firstDate.value <= midYearDate.value && secondDate.value >= midYearDate.value;
+  return (
+    firstDate.value <= midYearDate.value &&
+    secondDate.value >= midYearDate.value
+  );
 });
 
 const yearEndEligible = computed(() => {
-  return firstDate.value <= yearEndDate.value && secondDate.value >= yearEndDate.value;
+  return (
+    firstDate.value <= yearEndDate.value &&
+    secondDate.value >= yearEndDate.value
+  );
 });
-
 
 //==================================================================================
 //calculate tax rate
@@ -217,12 +252,19 @@ const calculatedDifferential = computed(() => {
   let differential = initialDifferentialAmount.value * differenceInMonths.value;
 
   if (checkFirstDate.value === true && checkSecondDate.value === false) {
-    differential += (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
+    differential +=
+      (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
   } else if (checkFirstDate.value === false && checkSecondDate.value === true) {
-    differential += (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
-  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
-    differential += (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
-    differential += (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
+    differential +=
+      (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
+  } else if (
+    checkFirstDate.value === false &&
+    checkSecondDate.value === false
+  ) {
+    differential +=
+      (initialDifferentialAmount.value / 22) * businessDaysSecondDate.value;
+    differential +=
+      (initialDifferentialAmount.value / 22) * businessDaysFirstDate.value;
   }
 
   return differential;
@@ -244,50 +286,83 @@ const sdBonus = computed(() => {
 //==================================================================================
 //calculate gross salary differential
 
-const grossSalDiff = computed(() => calculatedDifferential.value + sdBonus.value);
+const grossSalDiff = computed(
+  () => calculatedDifferential.value + sdBonus.value
+);
 
 //==================================================================================
 //calculate GSIS Rate
-    //GSIS PS AND GS RATES
-    const gsisPS = computed(() => {
-      return 0.09;
-    });
+//GSIS PS AND GS RATES
+const gsisPS = computed(() => {
+  return 0.09;
+});
 
-    const gsisGS = computed(() => {
-      return 0.12;
-    });
-
+const gsisGS = computed(() => {
+  return 0.12;
+});
 
 //==================================================================================
-//calculate GSIS Personal Share 
+//calculate GSIS Personal Share
 
 const gsisPshare = computed(() => {
-  let share = initialDifferentialAmount.value * differenceInMonths.value * gsisPS.value;
+  let share =
+    initialDifferentialAmount.value * differenceInMonths.value * gsisPS.value;
 
   if (checkFirstDate.value === false && checkSecondDate.value === true) {
-    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisPS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfFirstDay.value) *
+      totalCalendarDaysFirst.value *
+      gsisPS.value;
   } else if (checkFirstDate.value === true && checkSecondDate.value === false) {
-    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisPS.value;
-  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
-    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisPS.value;
-    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisPS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfSecondDay.value) *
+      totalCalendarDaysSecond.value *
+      gsisPS.value;
+  } else if (
+    checkFirstDate.value === false &&
+    checkSecondDate.value === false
+  ) {
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfFirstDay.value) *
+      totalCalendarDaysFirst.value *
+      gsisPS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfSecondDay.value) *
+      totalCalendarDaysSecond.value *
+      gsisPS.value;
   }
 
   return share;
 });
 
 //==================================================================================
-//calculate GSIS Government Share 
+//calculate GSIS Government Share
 const gsisGshare = computed(() => {
-  let share = initialDifferentialAmount.value * differenceInMonths.value * gsisGS.value;
+  let share =
+    initialDifferentialAmount.value * differenceInMonths.value * gsisGS.value;
 
   if (checkFirstDate.value === false && checkSecondDate.value === true) {
-    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisGS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfFirstDay.value) *
+      totalCalendarDaysFirst.value *
+      gsisGS.value;
   } else if (checkFirstDate.value === true && checkSecondDate.value === false) {
-    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisGS.value;
-  } else if (checkFirstDate.value === false && checkSecondDate.value === false) {
-    share += (initialDifferentialAmount.value / fullMonthOfFirstDay.value) * totalCalendarDaysFirst.value * gsisGS.value;
-    share += (initialDifferentialAmount.value / fullMonthOfSecondDay.value) * totalCalendarDaysSecond.value * gsisGS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfSecondDay.value) *
+      totalCalendarDaysSecond.value *
+      gsisGS.value;
+  } else if (
+    checkFirstDate.value === false &&
+    checkSecondDate.value === false
+  ) {
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfFirstDay.value) *
+      totalCalendarDaysFirst.value *
+      gsisGS.value;
+    share +=
+      (initialDifferentialAmount.value / fullMonthOfSecondDay.value) *
+      totalCalendarDaysSecond.value *
+      gsisGS.value;
   }
   return share;
 });
@@ -305,94 +380,213 @@ const withholdingTax = computed(() => {
 //==================================================================================
 //format all data to two decimal places as well as insert commas in thousands and millions place
 
-
-const round = (num, decimalPlaces) => Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+const round = (num, decimalPlaces) =>
+  Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
 
 const formatComma = (num) => {
-  watchEffect(()=> 
-    num.value = num.value.toString().replace(/[^0-9]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ','))
-    num.value = parseFloat(num.value.replace(/,/g, ''))
-  }
+  watchEffect(
+    () =>
+      (num.value = num.value
+        .toString()
+        .replace(/[^0-9]/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+  );
+  num.value = parseFloat(num.value.replace(/,/g, ""));
+};
 
-const formattedCurrentSalary = ()=> formatComma(currentSalary)
-const formattedProperSalary = ()=> formatComma(properSalary)
+const formattedCurrentSalary = () => formatComma(currentSalary);
+const formattedProperSalary = () => formatComma(properSalary);
 
 const formattedInitialDifferentialAmount = computed(() => {
-  return isNaN(initialDifferentialAmount.value) ? 0 : parseFloat(round(initialDifferentialAmount.value, 2));
+  return isNaN(initialDifferentialAmount.value)
+    ? 0
+    : parseFloat(round(initialDifferentialAmount.value, 2));
 });
 
-const formattedCalculatedDifferential = computed(()=> {
-  return isNaN(calculatedDifferential.value) ? 0 : parseFloat(round(calculatedDifferential.value,2))
-})
+const formattedCalculatedDifferential = computed(() => {
+  return isNaN(calculatedDifferential.value)
+    ? 0
+    : parseFloat(round(calculatedDifferential.value, 2));
+});
 
-const formattedGsisPshare = computed(()=> {
-  return isNaN(gsisPshare.value) ? 0 : parseFloat(round(gsisPshare.value,2))
-})
+const formattedGsisPshare = computed(() => {
+  return isNaN(gsisPshare.value) ? 0 : parseFloat(round(gsisPshare.value, 2));
+});
 
-const formattedGsisGshare = computed(()=> {
-  return isNaN(gsisGshare.value) ? 0 : parseFloat(round(gsisGshare.value,2))
-})
+const formattedGsisGshare = computed(() => {
+  return isNaN(gsisGshare.value) ? 0 : parseFloat(round(gsisGshare.value, 2));
+});
 
-const formattedWithholdingTax = computed(()=> {
-  return isNaN(withholdingTax.value) ? 0 : parseFloat(round(withholdingTax.value,2))
-})
+const formattedWithholdingTax = computed(() => {
+  return isNaN(withholdingTax.value)
+    ? 0
+    : parseFloat(round(withholdingTax.value, 2));
+});
 
-const formattedGrossSalDiff = computed(()=> {
-  return isNaN(grossSalDiff.value) ? 0 : parseFloat(round(grossSalDiff.value,2))
-})
+const formattedGrossSalDiff = computed(() => {
+  return isNaN(grossSalDiff.value)
+    ? 0
+    : parseFloat(round(grossSalDiff.value, 2));
+});
 
-const formattedSDBonus = computed(()=>{
-  return isNaN(sdBonus.value) ? 0 : parseFloat(round(sdBonus.value,2))
-})
+const formattedSDBonus = computed(() => {
+  return isNaN(sdBonus.value) ? 0 : parseFloat(round(sdBonus.value, 2));
+});
 
-const formattedLessGsis = computed(()=>{
-  return isNaN(lessGsis.value) ? 0 : parseFloat(round(lessGsis.value,2))
-})
-
+const formattedLessGsis = computed(() => {
+  return isNaN(lessGsis.value) ? 0 : parseFloat(round(lessGsis.value, 2));
+});
 
 //==================================================================================
-//finally the basic deductions 
+//finally the basic deductions
 
 const totalDeduction = computed(() => {
-      return formattedGsisPshare.value + formattedWithholdingTax.value;
-    });
+  return formattedGsisPshare.value + formattedWithholdingTax.value;
+});
 
 const netAmount = computed(() => {
-      return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
-    });
+  return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
+});
 </script>
 
-
 <template>
-
-<div class="block md:flex flex-col w-full h-auto">
-  <h1 class="p-2 font-bold text-5xl text-center text-gray-800">Salary Differential Calculator</h1>
-  <div class="px-5 gap-3 block md:flex w-full h-full">
-    <div class="w-full h-full pb-2">
-     <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
-      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">Input</h2>
-        <form action="" class="pl-5 pt-2 flex flex-col">
-          <label for="" class="pt-5 text-xl">Current Salary</label>
-          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
-          <label for="" class="pt-5 text-xl">Actual Salary</label>
-          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
-          <label for="" class="pt-5 text-xl">From</label>
-          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
-          <label for="" class="pt-5 text-xl">To</label>
-          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
-        </form>
-     </div>
-    </div>
-    <div class="w-full h-full pb-2">
-     <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
-      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">Results</h2>
-    </div>
+  <div class="block md:flex flex-col w-full h-auto">
+    <h1 class="my-4 p-2 font-bold text-5xl text-center text-sky-600">
+      Salary Differential Calculator
+    </h1>
+    <div class="px-5 gap-3 block md:flex w-full h-full">
+      <div class="w-full md:w-2/5 pb-2">
+        <div
+          class="w-full min-h-auto md:h-auto lg:h-full pb-16 bg-white border border-gray-700 rounded-md"
+        >
+          <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">
+            Input
+          </h2>
+          <form action="" class="pl-5 pt-2 flex flex-col gap-2 xl:gap-3">
+            <label for="" class="pt-5 text-xl">Current Salary</label>
+            <input
+              type="text"
+              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+            />
+            <label for="" class="pt-5 text-xl">Actual Salary</label>
+            <input
+              type="text"
+              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+            />
+            <label for="" class="pt-5 text-xl">From</label>
+            <input
+              type="text"
+              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+            />
+            <label for="" class="pt-5 text-xl">To</label>
+            <input
+              type="text"
+              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="w-full md:w-3/5 pb-2">
+        <div
+          class="w-full min-h-auto md:h-auto lg:h-full bg-white border border-gray-700 rounded-md"
+        >
+          <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">
+            Results
+          </h2>
+          <div class="pl-5 pt-5 flex">
+            <div class="flex justify-center items-center w-full h-full pb-3">
+              <table class="">
+                <tbody
+                  class="text-left text-base md:text-xl text-gray-800 uppercase"
+                >
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Current Salary</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Actual Salary</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Difference</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">From</th>
+                    <td>10/28/2022</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">To</th>
+                    <td>10/31/2022</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Gross Differential</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">SD Bonus</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Gross + SD Bonus</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">GSIS PS</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Less GSIS</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Tax</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
+                  >
+                    <th scope="row">Total Deduction</th>
+                    <td>25,439</td>
+                  </tr>
+                  <tr
+                    class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44"
+                  >
+                    <th scope="row">Net Differential</th>
+                    <td>25,439</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-</div>
-
-<!-- <div class="flex flex-col md:flex-row  justify-center items-center w-full h-auto">
+  <!-- <div class="flex flex-col md:flex-row  justify-center items-center w-full h-auto">
     <div class="flex justify-center items-center w-full h-screen">
       <div class="bg-white w-full h-full lg:w-[90%] md:h-[90%]">
         <div class="w-full h-auto p-2 bg-violet-700 text-white font-bold text-lg rounded-lg">Input</div>
@@ -457,7 +651,7 @@ const netAmount = computed(() => {
       </div>
     </div>
 </div> -->
- <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
+  <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
     <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
       <form class="flex flex-col justify-start items-center w-full md:w-1/2 h-full gap-3">
         <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
