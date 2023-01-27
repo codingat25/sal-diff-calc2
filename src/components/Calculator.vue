@@ -365,27 +365,27 @@ const netAmount = computed(() => {
 
 <template>
 
-<div class="block md:flex flex-col w-full h-auto bg-gray-200">
-  <h1 class="p-2 font-bold text-5xl text-center text-gray-700">Salary Differential Calculator</h1>
+<div class="block md:flex flex-col w-full h-auto">
+  <h1 class="p-2 font-bold text-5xl text-center text-gray-800">Salary Differential Calculator</h1>
   <div class="px-5 gap-3 block md:flex w-full h-full">
     <div class="w-full h-full pb-2">
      <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
-      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-700">Input</h2>
+      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">Input</h2>
         <form action="" class="pl-5 pt-2 flex flex-col">
           <label for="" class="pt-5 text-xl">Current Salary</label>
-          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
           <label for="" class="pt-5 text-xl">Actual Salary</label>
-          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
           <label for="" class="pt-5 text-xl">From</label>
-          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
           <label for="" class="pt-5 text-xl">To</label>
-          <input type="text" class="py-3 w-[90%] text-2xl text-gray-600 border border-gray-700 rounded-xl">
+          <input type="text" class="py-3 w-[95%] text-2xl text-gray-800 border border-gray-700 rounded-lg">
         </form>
      </div>
     </div>
     <div class="w-full h-full pb-2">
      <div class="w-full h-full bg-white border border-gray-700 rounded-md">     
-      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-700">Results</h2>
+      <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">Results</h2>
     </div>
     </div>
   </div>
