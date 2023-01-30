@@ -457,18 +457,20 @@ const netAmount = computed(() => {
     <div class="px-5 gap-3 block md:flex w-full h-full">
       <div class="w-full md:w-2/5 pb-2">
         <div
-          class="w-full min-h-auto md:h-auto lg:h-full pb-28 bg-white border border-gray-700 rounded-md"
+          class="w-full min-h-auto md:h-auto lg:h-full pb-16 bg-white border border-gray-700 rounded-md"
         >
           <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">
             Input
           </h2>
           <form action="" class="pl-5 pt-2 flex flex-col gap-2 xl:gap-3">
             <label for="" class="pt-5 text-xl">Current Salary</label>
+              <i class="font-base text-sky-700 text-sm">(salary in your payslip)</i>
             <input
               type="text"
               class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
             />
             <label for="" class="pt-5 text-xl">Actual Salary</label>
+              <i class="font-base text-sky-700 text-sm">(should be salary)</i>
             <input
               type="text"
               class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
@@ -495,7 +497,7 @@ const netAmount = computed(() => {
             Results
           </h2>
           <div class="pl-5 pt-5 flex">
-            <div class="flex justify-center items-center w-full h-full pb-3">
+            <div class="flex justify-center items-center w-full h-full pb-2">
               <table class="">
                 <tbody
                   class="text-left text-base md:text-xl text-gray-800 uppercase"
