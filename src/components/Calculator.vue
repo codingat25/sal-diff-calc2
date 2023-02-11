@@ -10,6 +10,7 @@ const properSalary = ref("");
 const firstDate = ref("");
 const secondDate = ref("");
 
+
 //=================================================================================
 // get initial differential amount
 const initialDifferentialAmount = computed(() => {
@@ -437,6 +438,22 @@ const formattedLessGsis = computed(() => {
   return isNaN(lessGsis.value) ? 0 : parseFloat(round(lessGsis.value, 2));
 });
 
+
+//==================================================================================
+//format all data to two decimal places as well as insert commas in thousands and millions place
+
+const formatDate = (date) => {
+  const formattedDate = ref('');
+
+  watchEffect(() => {
+    formattedDate.value = (dayjs(date.value).format('MM/DD/YYYY'));
+  });
+  return formattedDate;
+};
+
+const formattedFirstDate = () => formatDate(firstDate);
+const formattedSecondDate = () => formatDate(secondDate);
+
 //==================================================================================
 //finally the basic deductions
 
@@ -478,27 +495,27 @@ const netAmount = computed(() => {
             <label for="" class="pt-5 text-xl">From <br>
               <i class="font-base text-sky-700 text-sm">(duration of unpaid salary differential)</i></label>
             <input
-              type="text"
-              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+              type="date" v-model="firstDate"
+              class="py-3 w-[95%] text-3xl text-gray-800 text-center rounded-lg border border-gray-500 focus:outline-sky-600"
             />
             <label for="" class="pt-5 text-xl">To</label>
             <input
-              type="text"
-              class="py-3 w-[95%] text-2xl text-gray-800 rounded-lg border border-gray-500 focus:outline-sky-600"
+              type="date" v-model="secondDate" 
+              class="py-3 w-[95%] text-3xl text-gray-800 text-center rounded-lg border border-gray-500 focus:outline-sky-600"
             />
           </form>
         </div>
       </div>
       <div class="w-full md:w-3/5 pt-2 md:pt-0">
         <div
-          class="w-full min-h-auto md:h-auto lg:h-screen pb-14 bg-white border border-gray-700 rounded-md"
+          class="w-full min-h-auto md:h-auto lg:h-screen pb-5 bg-white border border-gray-700 rounded-md"
         >
           <h2 class="pl-5 pt-2 font-bold text-3xl text-left text-gray-800">
             Results
           </h2>
           <div class="pl-5 pt-5 flex">
             <div class="flex justify-center items-center w-full h-full pb-2">
-              <table class="">
+              <table class="w-full lg:w-3/4 mr-2">
                 <tbody
                   class="text-left text-base md:text-xl text-gray-800 uppercase"
                 >
@@ -506,79 +523,79 @@ const netAmount = computed(() => {
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Current Salary</th>
-                    <td>25,439</td>
+                    <td>{{ currentSalary }}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Actual Salary</th>
-                    <td>25,439</td>
+                    <td>{{properSalary}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Difference</th>
-                    <td>25,439</td>
+                    <td>{{initialDifferentialAmount}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">From</th>
-                    <td>10/28/2022</td>
+                    <td>{{formattedFirstDate().value}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">To</th>
-                    <td>10/31/2022</td>
+                    <td>{{formattedSecondDate().value}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Gross Differential</th>
-                    <td>25,439</td>
+                    <td>{{formattedCalculatedDifferential}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">SD Bonus</th>
-                    <td>25,439</td>
+                    <td>{{formattedSDBonus}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Gross + SD Bonus</th>
-                    <td>25,439</td>
+                    <td>{{formattedGrossSalDiff}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">GSIS PS</th>
-                    <td>25,439</td>
+                    <td>{{formattedGsisPshare}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Less GSIS</th>
-                    <td>25,439</td>
+                    <td>{{formattedLessGsis}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Tax</th>
-                    <td>25,439</td>
+                    <td>{{formattedWithholdingTax}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Total Deduction</th>
-                    <td>25,439</td>
+                    <td>{{totalDeduction}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Net Differential</th>
-                    <td>25,439</td>
+                    <td>{{netAmount}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -590,129 +607,4 @@ const netAmount = computed(() => {
       </div>
     </div>
   </div>
-
-  <!-- <div class="flex flex-col md:flex-row  justify-center items-center w-full h-auto">
-    <div class="flex justify-center items-center w-full h-screen">
-      <div class="bg-white w-full h-full lg:w-[90%] md:h-[90%]">
-        <div class="w-full h-auto p-2 bg-violet-700 text-white font-bold text-lg rounded-lg">Input</div>
-      </div>
-    </div>
-    <div class="flex justify-center items-center w-full h-screen">
-      <div class="bg-white w-full h-full lg:w-[90%] md:h-[90%] rounded-lg">
-        <div class="w-full h-auto p-2 bg-violet-700 text-white font-bold text-lg rounded-lg">Results</div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Current Salary</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span>{{currentSalary.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Proper Salary</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span>{{properSalary.toLocaleString('en-PH') }}</div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Amount</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedInitialDifferentialAmount.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">From</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span>{{firstDate.toLocaleString('en-PH')}}</div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">To</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span>{{secondDate.toLocaleString('en-PH')}}</div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Gross Salary Diff</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedCalculatedDifferential.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">SD Bonus</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedSDBonus.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Gross + SD Bonus</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedGrossSalDiff.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">GSIS</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedGsisPshare.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Less GSIS</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedLessGsis.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Tax</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{formattedWithholdingTax.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Total Deductions</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{totalDeduction.toLocaleString('en-PH')}}</span></div>
-        </div>
-        <div class="grid grid-cols-2 w-full h-auto p-1 lg:p-2 gap-x-2 border-b border-gray-200">
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base">Net Amount</div>
-          <div class="col-span-2 md:col-span-1 font-bold text-sm lg:text-base"><span class="pl-20 pr-10">P</span><span class="text-lg">{{netAmount.toLocaleString('en-PH')}}</span></div>
-        </div>
-
-      </div>
-    </div>
-</div> -->
-  <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0">
-    <div class="col-span-1 flex justify-center items-start h-auto md:h-screen">   
-      <form class="flex flex-col justify-start items-center w-full md:w-1/2 h-full gap-3">
-        <p class="flex w-full justify-start pt-10 font-bold text-2xl">Input</p>
-          <p class="flex w-full justify-center font-bold text-xl">Salary</p>
-          <label>Current Salary:</label>
-          <input placeholder="Current Salary" v-model="currentSalary" @input="formattedCurrentSalary"  class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <label>Actual Salary:</label>
-          <input placeholder="Actual Salary" v-model="properSalary" @input="formattedProperSalary" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <p class="flex w-full justify-center font-bold text-xl">Period Covered</p>
-          <label>From:</label>
-          <input placeholder="from" v-model="firstDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
-          <label>To:</label>
-          <input placeholder="to" v-model="secondDate" class="w-3/4 border border-gray-300 rounded-md p-2" />
-      </form>
-    </div>
-    
-    <div class="col-span-1 flex flex-col justify-start items-center h-screen">
-      <div class="flex flex-col gap-2 w-auto h-full">
-        <p class="flex w-full justify-start pt-10 font-bold text-2xl">Results</p>
-      <table class="flex justify-center items-center gap-2">
-      <tr class="flex flex-col text-left gap-y-2">
-        <th class="h-[1%]">Current Salary</th>
-        <th class="h-[1%]">Actual Salary</th>
-        <th class="h-[1%]">Amount</th>
-        <th class="h-[1%]">From</th>
-        <th class="h-[1%]">To</th>
-        <th class="h-[1%]">Total Gross Differential Amount</th>
-        <th class="h-[1%]">SD Bonus</th>
-        <th class="h-[1%]">Total Gross + SD Bonus</th>
-        <th class="h-[1%]">GSIS</th>
-        <th class="h-[1%]">Less GSIS</th>
-        <th class="h-[1%]">Withholding Tax</th>
-        <th class="h-[1%]">Total Deduction</th>
-        <th class="h-[1%]">Net Amount</th>
-      </tr>
-      <tr class="flex flex-col text-right gap-y-2">
-        <td class="h-[1%]">{{currentSalary.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{properSalary.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{formattedInitialDifferentialAmount.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{firstDate.toLocaleString('en-PH')}}</td>
-        <td class="h-[1%]">{{secondDate.toLocaleString('en-PH')}}</td>
-        <td class="h-[1%]">{{formattedCalculatedDifferential.toLocaleString('en-PH')}}</td>
-        <td class="h-[1%]">{{formattedSDBonus.toLocaleString('en-PH')}}</td>
-        <td class="h-[1%]">{{formattedGrossSalDiff.toLocaleString('en-PH')}}</td>
-        <td class="h-[1%]">{{formattedGsisPshare.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{formattedLessGsis.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{formattedWithholdingTax.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{totalDeduction.toLocaleString('en-PH') }}</td>
-        <td class="h-[1%]">{{netAmount.toLocaleString('en-PH') }}</td>
-      </tr>
-    </table>
-    <div class="flex justify-center items-center">
-      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Copy</button>
-      <button type="submit" class="text-white text-center py-2 px-10 bg-black border rounded-lg">Reset</button>
-    </div>
-      </div>
-    </div>
-  </div> -->
 </template>
