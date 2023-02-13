@@ -83,50 +83,6 @@ const getDayOfLastDateOfSecondDate = computed(
   () => getDateValues(lastDayOfSecondDate).day
 );
 
-//================================================================================
-//Difference in months
-//================================================================================
-//calculate difference in months
-
-// const differenceInMonths = computed(() => {
-//   if(dayjs(checkFirstDate.value) && dayjs(checkSecondDate.value) === true) {
-//     console.log(1)
-//     return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
-//   }
-//   else if((checkFirstDate.value === false && checkSecondDate.value === false) &&
-//   (dayjs(secondDate.value).diff(firstDate.value, "month")-1) < 0) {
-//     console.log(2)
-//     return 0
-//   }
-//   else if((checkFirstDate.value === false && checkSecondDate.value === false) &&
-//   (dayjs(secondDate.value).diff(firstDate.value, "month")-1) > 0){
-//     console.log(3)
-//     return dayjs(secondDate.value).diff(firstDate.value, "month") - 1;
-//   }
-//   else if ((checkFirstDate.value === false && checkSecondDate.value === true) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month"))
-//     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)<=31) {
-//       console.log(4)
-//       return dayjs(secondDate.value).diff(firstDate.value, "month") + 1;
-//   }
-//   else if ((checkFirstDate.value === false && checkSecondDate.value === true) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value) && dayjs(secondDate.value).isSame(dayjs(secondDate.value).endOf("month"))
-//     && ((dayjs(secondDate.value).diff(firstDate.value, "month"))+1)>=31) {
-//       console.log(5)
-//       return dayjs(secondDate.value).diff(firstDate.value, "month");
-//   }
-//   else if ((checkFirstDate.value === true && checkSecondDate.value === false) &&
-//    (getMonthOfFirstDay.value === getMonthOfSecondDay.value)) {
-//     console.log(6)
-//       return dayjs(secondDate.value).diff(firstDate.value, "month");
-//   }
-//   else if ((checkFirstDate.value === true && checkSecondDate.value === false) &&
-//    (getMonthOfFirstDay.value !== getMonthOfSecondDay.value))
-//    {
-//     console.log(7)
-//       return dayjs(secondDate.value).diff(firstDate.value, "month");
-//   }
-// });
 
 //==========================================================================================
 
@@ -283,6 +239,7 @@ const sdBonus = computed(() => {
     return 0;
   }
 });
+
 
 //==================================================================================
 //calculate gross salary differential
@@ -461,6 +418,11 @@ const totalDeduction = computed(() => {
   return formattedGsisPshare.value + formattedWithholdingTax.value;
 });
 
+const formattedTotalDeduction = computed(() => {
+  return isNaN(totalDeduction.value) ? 0 : parseFloat(round(totalDeduction.value, 2));
+});
+
+
 const netAmount = computed(() => {
   return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
 });
@@ -589,7 +551,7 @@ const netAmount = computed(() => {
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Total Deduction</th>
-                    <td>{{totalDeduction}}</td>
+                    <td>{{formattedTotalDeduction}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
