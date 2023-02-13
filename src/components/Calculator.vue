@@ -7,6 +7,7 @@ dayjs.extend(dayBusinessDays);
 
 const currentSalary = ref("");
 const properSalary = ref("");
+
 const firstDate = ref("");
 const secondDate = ref("");
 
@@ -171,16 +172,20 @@ const businessDaysSecondDate = computed(() =>
 //==================================================================================
 //check if data is eligible for mid-year and year-end
 const midYearEligible = computed(() => {
+  const formatFirstDate = dayjs(firstDate.value).format('MM/DD/YYYY')
+  const formatSecondDate = dayjs(secondDate.value).format('MM/DD/YYYY')
   return (
-    firstDate.value <= midYearDate.value &&
-    secondDate.value >= midYearDate.value
+    formatFirstDate <= midYearDate.value &&
+    formatSecondDate >= midYearDate.value
   );
 });
 
 const yearEndEligible = computed(() => {
+  const formatFirstDate = dayjs(firstDate.value).format('MM/DD/YYYY')
+  const formatSecondDate = dayjs(secondDate.value).format('MM/DD/YYYY')
   return (
-    firstDate.value <= yearEndDate.value &&
-    secondDate.value >= yearEndDate.value
+    formatFirstDate <= yearEndDate.value &&
+    formatSecondDate>= yearEndDate.value
   );
 });
 
@@ -358,7 +363,7 @@ const formattedProperSalary = () => formatComma(properSalary);
 const formattedInitialDifferentialAmount = computed(() => {
   return isNaN(initialDifferentialAmount.value)
     ? 0
-    : parseFloat(round(initialDifferentialAmount.value, 2));
+    : parseFloat(round(initialDifferentialAmount.value, 2))
 });
 
 const formattedCalculatedDifferential = computed(() => {
@@ -497,7 +502,10 @@ const netAmount = computed(() => {
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Difference</th>
-                    <td>{{initialDifferentialAmount}}</td>
+                    <td>{{initialDifferentialAmount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
@@ -515,49 +523,73 @@ const netAmount = computed(() => {
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Gross Differential</th>
-                    <td>{{formattedCalculatedDifferential}}</td>
+                    <td>{{formattedCalculatedDifferential.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">SD Bonus</th>
-                    <td>{{formattedSDBonus}}</td>
+                    <td>{{formattedSDBonus.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Gross + SD Bonus</th>
-                    <td>{{formattedGrossSalDiff}}</td>
+                    <td>{{formattedGrossSalDiff.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">GSIS PS</th>
-                    <td>{{formattedGsisPshare}}</td>
+                    <td>{{formattedGsisPshare.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Less GSIS</th>
-                    <td>{{formattedLessGsis}}</td>
+                    <td>{{formattedLessGsis.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Tax</th>
-                    <td>{{formattedWithholdingTax}}</td>
+                    <td>{{formattedWithholdingTax.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Total Deduction</th>
-                    <td>{{formattedTotalDeduction}}</td>
+                    <td>{{formattedTotalDeduction.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                   <tr
                     class="pl-0 flex justify-between pt-4 md:pt-2 gap-x-20 md:gap-x-20 lg:gap-x-44 border-b-2 border-sky-200"
                   >
                     <th scope="row">Net Differential</th>
-                    <td>{{netAmount}}</td>
+                    <td>{{netAmount.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}}</td>
                   </tr>
                 </tbody>
               </table>
