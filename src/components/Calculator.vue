@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watchEffect } from "vue";
 import dayjs from "dayjs";
 import dayBusinessDays from "dayjs-business-days";
 
+
 dayjs.extend(dayBusinessDays);
 
 const currentSalary = ref("");
@@ -431,6 +432,16 @@ const formattedTotalDeduction = computed(() => {
 const netAmount = computed(() => {
   return round(formattedGrossSalDiff.value - totalDeduction.value, 3);
 });
+
+// table data
+const tableData = ref([
+  ['Current Salary', 'Actual Salary', 'Difference', 'First Date', 'Second Date',
+   'Gross', 'SD Bonus', 'GSIS PS', 'Less GSIS', 'Tax', 'Total Deduction', 'Net' ],
+  [currentSalary, properSalary, formattedInitialDifferentialAmount,formattedFirstDate().value, formattedSecondDate().value,
+  formattedGrossSalDiff, formattedSDBonus, formattedGsisPshare, formattedLessGsis, 
+  formattedWithholdingTax, formattedTotalDeduction, netAmount ]
+])
+
 </script>
 
 <template>
@@ -473,6 +484,8 @@ const netAmount = computed(() => {
           </form>
         </div>
       </div>
+
+
       <div class="w-full md:w-3/5 pt-2 md:pt-0">
         <div
           class="w-full min-h-auto md:h-auto lg:h-screen pb-5 bg-white border border-gray-700 rounded-md"
@@ -482,7 +495,16 @@ const netAmount = computed(() => {
           </h2>
           <div class="pl-5 pt-5 flex">
             <div class="flex justify-center items-center w-full h-full pb-2">
-              <table class="w-full lg:w-3/4 mr-2">
+              <table>
+                <tr>
+                  
+                </tr>
+                <tr>
+
+                </tr>
+              </table>
+
+              <!-- <table class="w-full lg:w-3/4 mr-2">
                 <tbody
                   class="text-left text-base md:text-xl text-gray-800 uppercase"
                 >
@@ -592,7 +614,7 @@ const netAmount = computed(() => {
                         })}}</td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
             </div>
           </div>
           <div class="pb-5 flex justify-center w-full h-auto">
