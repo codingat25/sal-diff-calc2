@@ -504,7 +504,7 @@ const tableData = ref([
                 </tr>
               </table>
 
-              <!-- <table class="w-full lg:w-3/4 mr-2">
+              <table class="w-full lg:w-3/4 mr-2">
                 <tbody
                   class="text-left text-base md:text-xl text-gray-800 uppercase"
                 >
@@ -614,7 +614,7 @@ const tableData = ref([
                         })}}</td>
                   </tr>
                 </tbody>
-              </table> -->
+              </table>
             </div>
           </div>
           <div class="pb-5 flex justify-center w-full h-auto">
